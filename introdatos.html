@@ -1,0 +1,496 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Perfil de Proyecto: Desabastecimiento de Medicamentos en Cali</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+    <!-- Visualization & Content Choices:
+        - Report Info: Resumen Ejecutivo -> Goal: Inform -> Presentation: Text in Portada section -> Interaction: None -> Justification: Overview.
+        - Report Info: Planteamiento del Problema -> Goal: Explain -> Presentation: Structured text, bullet points -> Interaction: None -> Justification: Problem context.
+        - Report Info: Objetivos (General, Específicos, Actividades, Entregables) -> Goal: Detail -> Presentation: Lists, highlighted deliverables. Placeholder Chart.js for Entregable 2.1 (Visualizar tendencias temporales) -> Interaction: Chart tooltip (placeholder) -> Justification: Clear project goals.
+        - Report Info: Resultados Esperados -> Goal: Inform -> Presentation: Bullet points -> Interaction: None -> Justification: Project outcomes.
+        - Report Info: Metodología/Planeación (Gantt) -> Goal: Plan -> Presentation: HTML Table representing Gantt -> Interaction: None -> Justification: Project timeline.
+        - Report Info: Ejecución de las Actividades y Alcance -> Goal: Detail -> Presentation: Structured text -> Interaction: None -> Justification: Elaboration on execution.
+        - Report Info: Conclusiones -> Goal: Summarize -> Presentation: Bullet points/text -> Interaction: None -> Justification: Project summary.
+        - Report Info: Presupuesto -> Goal: Inform -> Presentation: HTML Table -> Interaction: None -> Justification: Financial plan.
+        - Report Info: Referencias -> Goal: Cite -> Presentation: List -> Interaction: None -> Justification: Sources.
+        - Report Info: Autores (from original PDF context) -> Goal: Credit -> Presentation: List in 'Equipo' section -> Interaction: None -> Justification: Authorship.
+        CONFIRMATION: NO SVG graphics used. NO Mermaid JS used. Chart.js for placeholder chart. -->
+    <style>
+        body { font-family: 'Inter', sans-serif; scroll-behavior: smooth; }
+        .chart-container { position: relative; width: 100%; max-width: 700px; margin-left: auto; margin-right: auto; height: 350px; max-height: 450px; background-color: #f9fafb; border: 1px solid #e5e7eb; border-radius: 0.5rem; padding: 1rem; }
+        @media (min-width: 768px) { .chart-container { height: 400px; } }
+        .nav-link { transition: color 0.3s ease, border-bottom-color 0.3s ease; border-bottom: 2px solid transparent; }
+        .nav-link:hover, .nav-link.active { color: #f59e0b; /* amber-500 */ border-bottom-color: #f59e0b; }
+        .section-title { border-bottom: 3px solid #0e7490; /* cyan-700 */ padding-bottom: 0.75rem; margin-bottom: 2rem; }
+        .card { background-color: white; border-radius: 0.75rem; box-shadow: 0 10px 15px -3px rgba(0,0,0,0.1), 0 4px 6px -2px rgba(0,0,0,0.05); transition: transform 0.3s ease, box-shadow 0.3s ease; }
+        .card:hover { transform: translateY(-5px); box-shadow: 0 20px 25px -5px rgba(0,0,0,0.1), 0 10px 10px -5px rgba(0,0,0,0.04); }
+        .table-container { max-height: 400px; overflow-y: auto; }
+        th { background-color: #0891b2; /* cyan-600 */ color: white; position: sticky; top: 0; z-index: 10; }
+        .gantt-table td, .gantt-table th { border: 1px solid #e5e7eb; padding: 0.5rem; text-align: left; font-size: 0.875rem; }
+        .gantt-task-filled { background-color: #a5f3fc; /* cyan-200 */ }
+        .deliverable { background-color: #fef3c7; /* amber-100 */ padding: 2px 6px; border-radius: 4px; font-weight: 500; color: #b45309; /* amber-700 */ font-size: 0.8rem; }
+    </style>
+</head>
+<body class="bg-stone-100 text-gray-800">
+
+    <header class="bg-white shadow-md sticky top-0 z-50">
+        <nav class="container mx-auto px-4 sm:px-6 py-3">
+            <div class="flex flex-wrap justify-between items-center">
+                <div class="text-xl sm:text-2xl font-bold text-cyan-700">Perfil de Proyecto</div>
+                <button id="nav-toggle" class="md:hidden text-gray-600 focus:outline-none">
+                    <svg class="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4 6h16M4 12h16m-7 6h7"></path></svg>
+                </button>
+                <div id="nav-content" class="w-full md:flex md:items-center md:w-auto hidden md:block mt-4 md:mt-0">
+                    <ul class="flex flex-col md:flex-row md:space-x-2 lg:space-x-3 xl:space-x-4 space-y-2 md:space-y-0 text-sm sm:text-base">
+                        <li><a href="#portada" class="nav-link block py-2 px-3 text-gray-700">Portada</a></li>
+                        <li><a href="#problema" class="nav-link block py-2 px-3 text-gray-700">Problema</a></li>
+                        <li><a href="#objetivos" class="nav-link block py-2 px-3 text-gray-700">Objetivos</a></li>
+                        <li><a href="#resultados-esperados" class="nav-link block py-2 px-3 text-gray-700">Resultados</a></li>
+                        <li><a href="#metodologia" class="nav-link block py-2 px-3 text-gray-700">Metodología</a></li>
+                        <li><a href="#ejecucion" class="nav-link block py-2 px-3 text-gray-700">Ejecución</a></li>
+                        <li><a href="#conclusiones" class="nav-link block py-2 px-3 text-gray-700">Conclusiones</a></li>
+                        <li><a href="#presupuesto" class="nav-link block py-2 px-3 text-gray-700">Presupuesto</a></li>
+                        <li><a href="#referencias" class="nav-link block py-2 px-3 text-gray-700">Referencias</a></li>
+                        <li><a href="#equipo" class="nav-link block py-2 px-3 text-gray-700">Equipo</a></li>
+                    </ul>
+                </div>
+            </div>
+        </nav>
+    </header>
+
+    <main class="container mx-auto p-4 md:p-8 space-y-16">
+        
+        <section id="portada" class="pt-16 -mt-16">
+            <div class="bg-gradient-to-br from-cyan-600 to-sky-700 text-white rounded-xl shadow-2xl p-8 md:p-12 text-center">
+                <h1 class="text-3xl sm:text-4xl md:text-5xl font-bold mb-6 leading-tight">Perfil de Proyecto Actualizado: Desabastecimiento de Medicamentos en Cali</h1>
+                <p class="text-lg md:text-xl mb-4 max-w-3xl mx-auto">La ciudad de Cali, Colombia, ha sido el epicentro de una severa crisis en la dispensación de medicamentos para los afiliados de Nueva EPS a principios de 2025. Este proyecto universitario de primer semestre se enfoca en el diseño de un modelo de visualización de datos que permita identificar patrones de desabastecimiento, sirviendo como base para futuras soluciones tecnológicas.</p>
+                <p class="text-sm font-light mt-6">Universidad Autónoma de Occidente</p>
+                <p class="text-sm font-light">Introducción a la Ingeniería de Datos e Inteligencia Artificial</p>
+            </div>
+        </section>
+
+        <section id="problema" class="pt-16 -mt-16">
+            <h2 class="text-3xl font-bold text-cyan-700 section-title">1. Planteamiento del Problema</h2>
+            <div class="space-y-6 text-gray-700 text-lg">
+                <p>Esta sección detalla la crítica situación de desabastecimiento de medicamentos enfrentada por los afiliados de Nueva EPS en Cali a principios de 2025. Se exploran las causas, el impacto en la población (especialmente adultos mayores del régimen subsidiado) y las fallas sistémicas evidenciadas.</p>
+                <p>La ciudad de Cali, Colombia, ha enfrentado una severa crisis en la dispensación de medicamentos para los afiliados de Nueva EPS a principios de 2025. Esta situación se ha caracterizado por demoras significativas y la no entrega de tratamientos esenciales, lo que ha generado un profundo sufrimiento entre los pacientes y ha provocado protestas públicas. El problema se originó por la interrupción operativa de Audifarma, un actor clave en la cadena de suministro farmacéutico, lo que sobrecargó drásticamente a Disfarma, el principal dispensario restante en la ciudad. Esta interrupción no fue meramente un contratiempo logístico, sino un colapso en la capacidad de respuesta del sistema de salud, dejando a miles de usuarios sin acceso a sus terapias vitales. La magnitud del desabastecimiento se manifestó en la reducción drástica de turnos de atención, pasando de aproximadamente 1.000 a tan solo 400 diarios en los puntos de dispensación, lo que exacerbó la ya crítica situación de espera y acceso.</p>
+                <p>Las consecuencias para los pacientes han sido críticas, manifestándose en filas extremadamente largas, esperas nocturnas, la implementación de sistemas de racionamiento como el "pico y cédula," y la denegación de medicamentos vitales. Esta situación ha afectado desproporcionadamente a poblaciones vulnerables, <strong>especialmente a los adultos mayores de 60 años afiliados al régimen subsidiado de los estratos socioeconómicos 1, 2 y 3</strong>. Para este grupo demográfico, la dificultad para acceder a sus tratamientos continuos, a menudo para enfermedades crónicas como diabetes, hipertensión, enfermedades cardiovasculares o respiratorias crónicas, representa no solo un inconveniente, sino una grave amenaza para su salud y calidad de vida.</p>
+                <p>La falta de acceso oportuno a medicamentos esenciales para esta población vulnerable subraya una falla crítica en la equidad y eficiencia del sistema de salud. A pesar de que la Constitución Colombiana (Artículo 49) garantiza el derecho a la salud como un servicio público esencial, la realidad en Cali evidencia una brecha significativa entre el marco legal y su implementación práctica.</p>
+            </div>
+        </section>
+
+        <section id="objetivos" class="pt-16 -mt-16">
+            <h2 class="text-3xl font-bold text-cyan-700 section-title">2. Objetivos del Proyecto</h2>
+            <div class="space-y-8">
+                <p class="mb-6 text-lg text-gray-700">Aquí se definen el objetivo general y los objetivos específicos del proyecto, que buscan diseñar un modelo de visualización de datos para entender y proponer soluciones al desabastecimiento de medicamentos.</p>
+                <div class="card p-6">
+                    <h3 class="text-2xl font-semibold text-sky-700 mb-4">2.1. Objetivo General</h3>
+                    <p class="text-lg text-gray-700">Diseñar un modelo de visualización de datos para identificar patrones de desabastecimiento de medicamentos en beneficiarios del régimen subsidiado de Nueva EPS en Cali, como base para futuras soluciones tecnológicas.</p>
+                </div>
+
+                <div>
+                    <h3 class="text-2xl font-semibold text-sky-700 mb-6">2.2. Objetivos Específicos y Actividades</h3>
+                    <div class="space-y-6">
+                        <div class="card p-6">
+                            <h4 class="text-xl font-bold text-cyan-700 mb-3">1. Recopilar y limpiar datos históricos de desabastecimiento de medicamentos en Cali</h4>
+                            <ul class="list-disc list-inside space-y-2 pl-4 text-gray-700">
+                                <li>
+                                    <strong>1.1 Identificar fuentes de datos públicas:</strong>
+                                    <p class="ml-4 text-sm">Revisar repositorios como Datos Abiertos de Cali, informes de la Secretaría de Salud y la Superintendencia Nacional de Salud.</p>
+                                    <p class="ml-4 mt-1"><span class="deliverable">Entregable:</span> Listado de 5 fuentes confiables con enlaces.</p>
+                                </li>
+                                <li>
+                                    <strong>1.2 Identificar causas principales:</strong>
+                                    <p class="ml-4 text-sm">Indagar en medios y noticias confiables (sin sesgo político) para determinar las 3–5 causas más relevantes.</p>
+                                    <p class="ml-4 mt-1"><span class="deliverable">Entregable:</span> Listado de causas con breve descripción y referencia.</p>
+                                </li>
+                            </ul>
+                        </div>
+
+                        <div class="card p-6">
+                            <h4 class="text-xl font-bold text-cyan-700 mb-3">2. Analizar patrones de desabastecimiento mediante técnicas visuales</h4>
+                            <ul class="list-disc list-inside space-y-2 pl-4 text-gray-700">
+                                <li>
+                                    <strong>2.1 Visualizar tendencias temporales:</strong>
+                                    <p class="ml-4 text-sm">Crear gráficos de línea (insulinas y antihipertensivos) con filtros por medicamento (por ejemplo, en Tableau o Power BI).</p>
+                                    <p class="ml-4 mt-1"><span class="deliverable">Entregable:</span> Captura o exportación de un gráfico interactivo.</p>
+                                    <div class="chart-container mt-4">
+                                        <canvas id="tendenciasMedicamentosChart"></canvas>
+                                    </div>
+                                    <p class="text-center text-xs text-gray-500 mt-1">Ejemplo de visualización de tendencias (Entregable 2.1).</p>
+                                </li>
+                                <li>
+                                    <strong>2.2 Desarrollar página web interactiva:</strong>
+                                    <p class="ml-4 text-sm">Agrupar todos los datos y visualizaciones en una web sencilla (HTML/CSS/JavaScript) alojada en GitHub Pages.</p>
+                                    <p class="ml-4 mt-1"><span class="deliverable">Entregable:</span> Enlace público a la página web que muestre casos reales y la gravedad del desabastecimiento.</p>
+                                </li>
+                            </ul>
+                        </div>
+
+                        <div class="card p-6">
+                            <h4 class="text-xl font-bold text-cyan-700 mb-3">3. Iniciar campaña de concientización en un foro popular</h4>
+                            <ul class="list-disc list-inside space-y-2 pl-4 text-gray-700">
+                                <li>
+                                    <strong>3.1 Lanzar hilo en red social:</strong>
+                                    <p class="ml-4 text-sm">Crear un hilo detallado en Reddit (o Threads/X) con resumen, gráficos clave y enlace a la página web.</p>
+                                    <p class="ml-4 mt-1"><span class="deliverable">Entregable:</span> URL pública del hilo de discusión.</p>
+                                </li>
+                            </ul>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <section id="resultados-esperados" class="pt-16 -mt-16">
+            <h2 class="text-3xl font-bold text-cyan-700 section-title">3. Resultados Esperados</h2>
+            <div class="space-y-6 text-gray-700 text-lg">
+                 <p>Esta sección describe los entregables y resultados concretos que se esperan al finalizar el proyecto, incluyendo informes, listados de fuentes y causas, visualizaciones interactivas y una campaña de concientización.</p>
+                <ul class="list-disc list-inside space-y-3">
+                    <li>Un informe detallado que exponga el planteamiento del problema, los objetivos, la metodología, la ejecución (planificada), y las conclusiones sobre la crisis de dispensación de medicamentos de Nueva EPS en Cali, con un enfoque específico en los adultos mayores de 60 años del régimen subsidiado de estratos 1, 2 y 3.</li>
+                    <li>Un <strong>listado de al menos 5 fuentes de datos públicas y confiables</strong> sobre desabastecimiento de medicamentos en Cali, con sus respectivos enlaces.</li>
+                    <li>Un <strong>listado de 3 a 5 causas principales</strong> que llevaron a la crisis, con una breve descripción y referencias.</li>
+                    <li>Una <strong>captura o exportación de un gráfico interactivo</strong> que visualice tendencias temporales de desabastecimiento para medicamentos clave (insulinas y antihipertensivos).</li>
+                    <li>Un <strong>enlace público a una página web interactiva</strong> (HTML/CSS/JavaScript) alojada en GitHub Pages, que consolide los datos y visualizaciones, mostrando casos reales y la gravedad del desabastecimiento.</li>
+                    <li>Una <strong>URL pública de un hilo de discusión en una red social</strong> (Reddit, Threads o X) que resuma el proyecto, presente los prototipos de gráficos y enlace a la página web, iniciando una campaña de concientización.</li>
+                    <li>Conclusiones que sinteticen los hallazgos y sugieran áreas para un monitoreo continuo y posibles reformas futuras, siempre considerando el impacto en la población de adultos mayores del régimen subsidiado.</li>
+                </ul>
+            </div>
+        </section>
+
+        <section id="metodologia" class="pt-16 -mt-16">
+            <h2 class="text-3xl font-bold text-cyan-700 section-title">4. Metodología/Planeación - Diagrama de Gantt</h2>
+            <p class="mb-6 text-lg text-gray-700">El proyecto se ejecutará siguiendo un plan de trabajo estructurado en actividades clave, distribuidas a lo largo de 4 semanas. El siguiente diagrama de Gantt detalla este plan.</p>
+            <div class="card p-2 sm:p-4 md:p-6 overflow-x-auto">
+                <div class="table-container">
+                    <table class="min-w-full divide-y divide-gray-300 gantt-table">
+                        <thead class="bg-cyan-600 text-white">
+                            <tr>
+                                <th>Actividad</th>
+                                <th>Responsable</th>
+                                <th>Duración (días)</th>
+                                <th>Sem 1</th>
+                                <th>Sem 2</th>
+                                <th>Sem 3</th>
+                                <th>Sem 4</th>
+                                <th>Herramientas</th>
+                                <th>Contribuye a</th>
+                            </tr>
+                        </thead>
+                        <tbody class="bg-white divide-y divide-gray-200">
+                            <tr><td colspan="9" class="font-semibold bg-cyan-50 py-2 text-center">1. Recopilar y limpiar datos</td></tr>
+                            <tr>
+                                <td>1.1 Identificar fuentes de datos públicas</td>
+                                <td>Estudiante 2</td><td>3</td>
+                                <td class="gantt-task-filled">XXX</td><td></td><td></td><td></td>
+                                <td>Navegadores web, Docs</td><td>O.E. 1</td>
+                            </tr>
+                            <tr>
+                                <td>1.2 Identificar causas principales</td>
+                                <td>Estudiante 5</td><td>3</td>
+                                <td class="gantt-task-filled">XXX</td><td></td><td></td><td></td>
+                                <td>Medios, Informes</td><td>O.E. 1</td>
+                            </tr>
+                            <tr><td colspan="9" class="font-semibold bg-cyan-50 py-2 text-center">2. Analizar patrones</td></tr>
+                            <tr>
+                                <td>2.1 Visualizar tendencias temporales</td>
+                                <td>Estudiante 3</td><td>5</td>
+                                <td></td><td class="gantt-task-filled">XXXXX</td><td></td><td></td>
+                                <td>Tableau/Power BI, Excel</td><td>O.E. 2</td>
+                            </tr>
+                            <tr>
+                                <td>2.2 Desarrollar página web interactiva</td>
+                                <td>Estudiante 4</td><td>7</td>
+                                <td></td><td class="gantt-task-filled">XXXX</td><td class="gantt-task-filled">XXX</td><td></td>
+                                <td>HTML, CSS, JS, VS Code</td><td>O.E. 2</td>
+                            </tr>
+                            <tr><td colspan="9" class="font-semibold bg-cyan-50 py-2 text-center">3. Iniciar campaña de concientización</td></tr>
+                            <tr>
+                                <td>3.1 Lanzar hilo en red social</td>
+                                <td>Estudiante 5</td><td>3</td>
+                                <td></td><td></td><td class="gantt-task-filled">XXX</td><td></td>
+                                <td>Reddit/Threads/X</td><td>O.E. 3</td>
+                            </tr>
+                             <tr><td colspan="9" class="font-semibold bg-cyan-50 py-2 text-center">4. Redacción del informe final</td></tr>
+                            <tr>
+                                <td>4. Redacción del informe final (integración)</td>
+                                <td>Estudiante 1</td><td>5</td>
+                                <td></td><td></td><td class="gantt-task-filled">XXXX</td><td class="gantt-task-filled">X</td>
+                                <td>Google Docs/Word</td><td>O.G., O.E. 1,2,3</td>
+                            </tr>
+                            <tr><td colspan="9" class="font-semibold bg-cyan-50 py-2 text-center">5. Revisión y edición</td></tr>
+                            <tr>
+                                <td>5. Revisión y edición del informe</td>
+                                <td>Todos</td><td>2</td>
+                                <td></td><td></td><td></td><td class="gantt-task-filled">XX</td>
+                                <td>Google Docs/Word</td><td>O.G., O.E. 1,2,3</td>
+                            </tr>
+                        </tbody>
+                    </table>
+                </div>
+            </div>
+        </section>
+
+        <section id="ejecucion" class="pt-16 -mt-16">
+            <h2 class="text-3xl font-bold text-cyan-700 section-title">5. Ejecución de las Actividades y Alcance de los Objetivos</h2>
+            <div class="space-y-6 text-gray-700 text-lg">
+                <p>Esta sección detalla cómo se llevarán a cabo las actividades planificadas para alcanzar cada objetivo específico del proyecto, desde la identificación de fuentes de datos hasta la creación de la campaña de concientización.</p>
+                <ul class="list-disc list-inside space-y-3">
+                    <li><strong>Identificación de fuentes y causas (Objetivo Específico 1):</strong> Se procederá con la búsqueda y selección de fuentes de datos públicas relevantes, como informes de la Secretaría de Salud de Cali y la Superintendencia Nacional de Salud, así como repositorios de Datos Abiertos. Paralelamente, se realizará una investigación en medios de comunicación confiables para identificar las causas principales del desabastecimiento, enfocándose en su impacto en la población objetivo. Esto permitirá establecer una base de datos conceptual y un entendimiento profundo de la problemática.</li>
+                    <li><strong>Diseño de visualizaciones y plataforma web (Objetivo Específico 2):</strong> Se diseñarán prototipos de gráficos de línea para visualizar las tendencias de desabastecimiento de medicamentos clave como la insulina y los antihipertensivos, contemplando la integración de filtros interactivos. Posteriormente, se conceptualizará la estructura y el diseño de una página web interactiva sencilla (HTML/CSS/JavaScript) que agrupe estas visualizaciones y presente casos reales, sirviendo como un modelo de cómo se podría mostrar la gravedad del desabastecimiento.</li>
+                    <li><strong>Planificación de la campaña de concientización (Objetivo Específico 3):</strong> Se elaborará una propuesta para una campaña de concientización, que incluirá el diseño de un hilo detallado para una red social popular (ej., Reddit, Threads o X). Este hilo resumirá los hallazgos clave del proyecto, presentará los prototipos de gráficos y enlazará a la página web diseñada, sentando las bases para una futura difusión efectiva de la información.</li>
+                </ul>
+            </div>
+        </section>
+
+        <section id="conclusiones" class="pt-16 -mt-16">
+            <h2 class="text-3xl font-bold text-cyan-700 section-title">6. Conclusiones</h2>
+            <div class="space-y-6 text-gray-700 text-lg">
+                <p>Las conclusiones del proyecto resaltarán la multifactorialidad de la crisis de medicamentos en Cali, el impacto desproporcionado en los adultos mayores del régimen subsidiado y la necesidad de reformas estructurales para garantizar el acceso equitativo a la salud.</p>
+                <p>La crisis de dispensación de medicamentos de Nueva EPS en Cali a principios de 2025 fue un evento multifacético, resultado de la interrupción operativa de Audifarma, la sobrecarga de Disfarma, disputas financieras y deficiencias logísticas. Las consecuencias para los pacientes fueron severas, manifestándose en largas filas, racionamiento y la denegación de tratamientos vitales, <strong>afectando desproporcionadamente a los adultos mayores de 60 años del régimen subsidiado de los estratos 1, 2 y 3.</strong></p>
+                <p>Aunque se implementaron medidas inmediatas como la apertura de nuevos puntos y la extensión de horarios, el escepticismo de los pacientes y la persistencia de quejas sugieren que una solución integral aún no se ha alcanzado. Para una solución duradera, es imperativo mejorar la coordinación entre las EPS, los operadores farmacéuticos y las entidades gubernamentales, así como aumentar la transparencia financiera y desarrollar una mayor capacidad de contingencia en la cadena de suministro. <strong>Es crucial que cualquier reforma futura priorice la creación de mecanismos de acceso que garanticen la entrega oportuna y sin barreras para los adultos mayores de bajos recursos, quienes son los más vulnerables a las interrupciones del servicio.</strong></p>
+                <p>Esta crisis en Cali no es un incidente aislado, sino un síntoma de fragilidades más profundas dentro del sistema de salud colombiano, lo que ha erosionado la confianza pública y señala la urgente necesidad de reformas estructurales en la transparencia financiera, la capacidad de contingencia y la coordinación entre los diversos actores del sector.</p>
+            </div>
+        </section>
+
+        <section id="presupuesto" class="pt-16 -mt-16">
+            <h2 class="text-3xl font-bold text-cyan-700 section-title">8. Presupuesto Estimado del Proyecto Universitario</h2>
+            <p class="mb-6 text-lg text-gray-700">Se presenta un presupuesto realista para la ejecución de este proyecto universitario, considerando un equipo de 5 estudiantes y las actividades propuestas.</p>
+            <div class="card p-2 sm:p-4 md:p-6 overflow-x-auto">
+                <table class="min-w-full divide-y divide-gray-300">
+                    <thead class="bg-cyan-600 text-white">
+                        <tr>
+                            <th class="px-4 py-3 text-left text-xs font-medium uppercase tracking-wider">Concepto</th>
+                            <th class="px-4 py-3 text-right text-xs font-medium uppercase tracking-wider">Cantidad</th>
+                            <th class="px-4 py-3 text-right text-xs font-medium uppercase tracking-wider">Costo unitario (COP)</th>
+                            <th class="px-4 py-3 text-right text-xs font-medium uppercase tracking-wider">Total (COP)</th>
+                            <th class="px-4 py-3 text-left text-xs font-medium uppercase tracking-wider">Responsable</th>
+                        </tr>
+                    </thead>
+                    <tbody class="bg-white divide-y divide-gray-200">
+                        <tr>
+                            <td class="px-4 py-3 whitespace-nowrap">Suscripción Tableau/Power BI (1 mes)</td>
+                            <td class="px-4 py-3 text-right">1</td>
+                            <td class="px-4 py-3 text-right">200.000</td>
+                            <td class="px-4 py-3 text-right">200.000</td>
+                            <td class="px-4 py-3">Estudiante 3</td>
+                        </tr>
+                        <tr>
+                            <td class="px-4 py-3 whitespace-nowrap">Dominio y hosting web (GitHub Pages gratis)</td>
+                            <td class="px-4 py-3 text-right">0 (gratis)</td>
+                            <td class="px-4 py-3 text-right">0</td>
+                            <td class="px-4 py-3 text-right">0</td>
+                            <td class="px-4 py-3">—</td>
+                        </tr>
+                        <tr>
+                            <td class="px-4 py-3 whitespace-nowrap">Licencias de software estadístico (RStudio/VS Code)</td>
+                            <td class="px-4 py-3 text-right">0 (gratuito)</td>
+                            <td class="px-4 py-3 text-right">0</td>
+                            <td class="px-4 py-3 text-right">0</td>
+                            <td class="px-4 py-3">—</td>
+                        </tr>
+                        <tr>
+                            <td class="px-4 py-3 whitespace-nowrap">Transporte para reuniones de campo</td>
+                            <td class="px-4 py-3 text-right">10</td>
+                            <td class="px-4 py-3 text-right">20.000</td>
+                            <td class="px-4 py-3 text-right">200.000</td>
+                            <td class="px-4 py-3">Estudiante 2 / Estudiante 5</td>
+                        </tr>
+                        <tr>
+                            <td class="px-4 py-3 whitespace-nowrap">Impresión de informes finales</td>
+                            <td class="px-4 py-3 text-right">5</td>
+                            <td class="px-4 py-3 text-right">10.000</td>
+                            <td class="px-4 py-3 text-right">50.000</td>
+                            <td class="px-4 py-3">Estudiante 1</td>
+                        </tr>
+                        <tr class="bg-gray-50 font-semibold">
+                            <td class="px-4 py-3 whitespace-nowrap text-right" colspan="3">Total general</td>
+                            <td class="px-4 py-3 text-right">450.000</td>
+                            <td class="px-4 py-3">—</td>
+                        </tr>
+                    </tbody>
+                </table>
+            </div>
+        </section>
+        
+        <section id="referencias" class="pt-16 -mt-16">
+            <h2 class="text-3xl font-bold text-cyan-700 section-title">7. Referencias</h2>
+            <div class="card p-6">
+                <p class="mb-4 text-lg text-gray-700">Esta sección lista las fuentes de información utilizadas para la elaboración del perfil del proyecto.</p>
+                <ul class="list-decimal list-inside space-y-2 text-gray-700 text-sm">
+                    <li><a href="https://elpais.com/america-colombia/2025-03-29/laboratorios-distribuidores-gobierno-y-eps-asi-falla-la-cadena-de-medicamentos-en-colombia.html" target="_blank" class="text-cyan-600 hover:text-amber-600">El País - Falla la cadena de medicamentos</a></li>
+                    <li><a href="https://www.wradio.com.co/2025/03/20/crisis-en-la-entrega-de-medicamentos-de-nueva-eps-en-cali/" target="_blank" class="text-cyan-600 hover:text-amber-600">W Radio - Crisis entrega medicamentos Nueva EPS Cali</a></li>
+                    <li><a href="https://zenuradio.com/2025/03/pacientes-de-la-nueva-eps-en-cali-bloquearon-vias-pidiendo-respuestas-por-falta-de-medicamentos/" target="_blank" class="text-cyan-600 hover:text-amber-600">Zenú Radio - Pacientes Nueva EPS Cali bloquean vías</a></li>
+                    <li><a href="https://www.eltiempo.com/colombia/otras-ciudades/el-drama-que-viven-los-colombianos-para-reclamar-medicamentos-de-urgencia-cali-la-ciudad-mas-critica-3437456" target="_blank" class="text-cyan-600 hover:text-amber-600">El Tiempo - Drama reclamar medicamentos Cali</a></li>
+                    <li><a href="https://www.elnuevosiglo.com.co/nacion/usuarios-de-nueva-eps-en-cali-duermen-en-la-calle-para-reclamar-medicamentos" target="_blank" class="text-cyan-600 hover:text-amber-600">El Nuevo Siglo - Usuarios Nueva EPS Cali duermen en la calle</a></li>
+                    <li><a href="https://www.infobae.com/colombia/2025/03/22/luego-de-tres-dias-usuarios-de-nueva-eps-concluyeron-planton-en-la-sede-de-la-supersalud-tras-lograr-acuerdos/" target="_blank" class="text-cyan-600 hover:text-amber-600">Infobae - Usuarios Nueva EPS concluyen plantón Supersalud</a></li>
+                    <li><a href="https://redmas.com.co/colombia/Nueva-EPS-anuncia-a-sus-afiliados-solucion-para-la-crisis-de-medicamentos-en-Cali-Servicio-de-salud-se-normalizaria-20250325-0028.html" target="_blank" class="text-cyan-600 hover:text-amber-600">RedMas - Nueva EPS anuncia solución crisis Cali</a></li>
+                    <li><a href="https://www.infobae.com/colombia/2025/03/26/nueva-eps-abre-tres-nuevos-puntos-de-dispensacion-de-medicamentos-en-cali-para-hacer-frente-a-la-crisis/" target="_blank" class="text-cyan-600 hover:text-amber-600">Infobae - Nueva EPS abre nuevos puntos dispensación Cali</a></li>
+                    <li><a href="https://www.elcolombiano.com/colombia/salud/hay-alerta-de-escasez-de-insulina-en-diferentes-partes-de-colombia-AF26673416" target="_blank" class="text-cyan-600 hover:text-amber-600">El Colombiano - Alerta escasez insulina Colombia</a></li>
+                    <li><a href="https://www.tiktok.com/@noti90minutos/video/7485760000334236983" target="_blank" class="text-cyan-600 hover:text-amber-600">TikTok Noti90Minutos - Video sobre crisis</a></li>
+                    <li><a href="https://www.tiktok.com/@cwmasnoticias/video/7483872381522464055" target="_blank" class="text-cyan-600 hover:text-amber-600">TikTok CWMasNoticias - Video sobre crisis</a></li>
+                    <li><a href="https://www.tiktok.com/@supersaludcol/video/7449157881162648837" target="_blank" class="text-cyan-600 hover:text-amber-600">TikTok Supersalud - Video sobre acuerdos</a></li>
+                    <li><a href="https://www.nuevaeps.com.co/node/11754" target="_blank" class="text-cyan-600 hover:text-amber-600">Nueva EPS - Comunicado oficial 1</a></li>
+                     <li><a href="https://www.nuevaeps.com.co/node/11756" target="_blank" class="text-cyan-600 hover:text-amber-600">Nueva EPS - Comunicado oficial 2</a></li>
+                    <li><a href="https://nuevaeps.com.co/coronavirus-atencion/como-reclamar-medicamentos" target="_blank" class="text-cyan-600 hover:text-amber-600">Nueva EPS - Cómo reclamar medicamentos</a></li>
+                </ul>
+            </div>
+        </section>
+
+        <section id="equipo" class="pt-16 -mt-16">
+            <h2 class="text-3xl font-bold text-cyan-700 section-title">Equipo del Proyecto</h2>
+            <p class="mb-6 text-lg text-gray-700 text-center">Este proyecto es desarrollado por estudiantes de la Universidad Autónoma de Occidente.</p>
+            <div class="grid sm:grid-cols-2 lg:grid-cols-3 gap-6">
+                <div class="card p-6 text-center">
+                    <h3 class="text-lg font-semibold text-sky-700">Jose David Buitrago Aponte</h3>
+                </div>
+                <div class="card p-6 text-center">
+                    <h3 class="text-lg font-semibold text-sky-700">Bryan Romero Pardo</h3>
+                </div>
+                <div class="card p-6 text-center">
+                    <h3 class="text-lg font-semibold text-sky-700">Juan Manuel Barrera</h3>
+                </div>
+                <div class="card p-6 text-center">
+                    <h3 class="text-lg font-semibold text-sky-700">Samuel Florez</h3>
+                </div>
+                <div class="card p-6 text-center">
+                    <h3 class="text-lg font-semibold text-sky-700">Jose Emanuel Morcillo Sandoval</h3>
+                </div>
+            </div>
+        </section>
+
+    </main>
+
+    <footer class="bg-gray-800 text-white text-center p-8 mt-12">
+        <p class="text-sm">&copy; <span id="currentYear"></span> Perfil de Proyecto - Desabastecimiento de Medicamentos en Cali.</p>
+        <p class="text-xs mt-1">SPA generada con fines ilustrativos del proyecto universitario.</p>
+    </footer>
+
+    <script>
+        document.getElementById('currentYear').textContent = new Date().getFullYear();
+
+        const navToggle = document.getElementById('nav-toggle');
+        const navContent = document.getElementById('nav-content');
+        const navLinks = document.querySelectorAll('.nav-link');
+
+        navToggle.addEventListener('click', () => {
+            navContent.classList.toggle('hidden');
+        });
+
+        navLinks.forEach(link => {
+            link.addEventListener('click', (e) => {
+                const targetId = link.getAttribute('href');
+                const targetElement = document.querySelector(targetId);
+                if (targetElement) {
+                    // Smooth scroll handled by CSS scroll-behavior: smooth;
+                }
+                // Active link styling
+                navLinks.forEach(l => l.classList.remove('active'));
+                link.classList.add('active');
+
+                if (window.innerWidth < 768) { // Tailwind's md breakpoint
+                    navContent.classList.add('hidden');
+                }
+            });
+        });
+        
+        // Placeholder Chart.js for Entregable 2.1
+        const tendenciasCtx = document.getElementById('tendenciasMedicamentosChart');
+        if (tendenciasCtx) {
+            new Chart(tendenciasCtx, {
+                type: 'line',
+                data: {
+                    labels: ['Enero', 'Febrero', 'Marzo', 'Abril', 'Mayo'], // Example labels
+                    datasets: [{
+                        label: 'Reportes Insulinas (Ejemplo)',
+                        data: [65, 59, 80, 81, 56], // Example data
+                        borderColor: 'rgb(8, 145, 178)', // cyan-600
+                        backgroundColor: 'rgba(8, 145, 178, 0.1)',
+                        fill: true,
+                        tension: 0.1
+                    }, {
+                        label: 'Reportes Antihipertensivos (Ejemplo)',
+                        data: [28, 48, 40, 19, 86], // Example data
+                        borderColor: 'rgb(245, 158, 11)', // amber-500
+                        backgroundColor: 'rgba(245, 158, 11, 0.1)',
+                        fill: true,
+                        tension: 0.1
+                    }]
+                },
+                options: {
+                    responsive: true,
+                    maintainAspectRatio: false,
+                    scales: {
+                        y: { 
+                            beginAtZero: true,
+                            title: { display: true, text: 'Número de Reportes de Desabastecimiento'}
+                        },
+                        x: {
+                             title: { display: true, text: 'Mes'}
+                        }
+                    },
+                    plugins: {
+                        legend: { position: 'top' },
+                        title: {
+                            display: true,
+                            text: 'Tendencias de Desabastecimiento de Medicamentos (Ejemplo)',
+                            font: { size: 16 }
+                        },
+                        tooltip: {
+                            mode: 'index',
+                            intersect: false,
+                            callbacks: {
+                                label: function(context) {
+                                    let label = context.dataset.label || '';
+                                    if (label) {
+                                        label += ': ';
+                                    }
+                                    if (context.parsed.y !== null) {
+                                        label += context.parsed.y + ' reportes';
+                                    }
+                                    return label;
+                                }
+                            }
+                        }
+                    },
+                    interaction: {
+                        mode: 'nearest',
+                        axis: 'x',
+                        intersect: false
+                    }
+                }
+            });
+        }
+
+        // Active link on scroll
+        const sections = document.querySelectorAll('main section');
+        window.addEventListener('scroll', () => {
+            let current = '';
+            sections.forEach(section => {
+                const sectionTop = section.offsetTop;
+                if (pageYOffset >= sectionTop - 90) { // Adjust offset for sticky header
+                    current = section.getAttribute('id');
+                }
+            });
+
+            navLinks.forEach(link => {
+                link.classList.remove('active');
+                if (link.getAttribute('href').substring(1) === current) {
+                    link.classList.add('active');
+                }
+            });
+             // Set first link active if at top
+            if (window.pageYOffset < sections[0].offsetTop - 90) {
+                 navLinks.forEach(l => l.classList.remove('active'));
+                 if (navLinks.length > 0) navLinks[0].classList.add('active');
+            }
+        });
+        // Set initial active link
+        if (navLinks.length > 0) navLinks[0].classList.add('active');
+
+    </script>
+</body>
+</html>
